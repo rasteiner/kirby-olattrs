@@ -16,7 +16,6 @@ window.panel.plugin("rasteiner/olAttrs", {
         return {
           orderedList: () => {
             if(this.editor.activeNodes.includes('orderedList') === false) {
-              console.log('hello', utils.toggleList(listType, schema.nodes.listItem))
               return utils.toggleList(listType, schema.nodes.listItem);
             }
 
