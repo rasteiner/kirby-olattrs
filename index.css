@@ -1,0 +1,9 @@
+.k-text ol[type] {
+  list-style-type: revert;
+  list-style-type: revert-layer;
+}
+
+.k-text ol[type]>li {
+  list-style-type: revert;
+  list-style-type: revert-layer;
+}
