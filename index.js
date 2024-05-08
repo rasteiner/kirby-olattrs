@@ -14,17 +14,19 @@ window.panel.plugin("rasteiner/olAttrs", {
 
       commands({ type: listType, schema, utils }) {
         return {
-          orderedList: () => {
-            let type, order;
-
+          orderedList: async () => {
             if(this.editor.activeNodes.includes('orderedList') === false) {
               return utils.toggleList(listType, schema.nodes.listItem);
             }
 
-            type = this.editor.activeNodeAttrs.orderedList.type;
-            order = this.editor.activeNodeAttrs.orderedList.order;
+            const {type, order} = this.editor.activeNodeAttrs.orderedList;
+            const {editor} = this;
 
-            panel.dialog.open({
+            // If I don't wrap this in a setTimeout,
+            // the panel freaks out when I resize the window after the dialog is closed.
+            // It throws an error from the k-dropdown-content::setPosition() function:
+            // "Failed to execute 'showModal' on 'HTMLDialogElement': The element is not in a Document."
+            setTimeout(() => panel.dialog.open({
               component: 'k-form-dialog',
               props: {
                 fields: {
@@ -50,12 +52,14 @@ window.panel.plugin("rasteiner/olAttrs", {
                 }
               },
               on: {
-                submit: (data) => {
+                submit(data) {
                   panel.dialog.close();
-                  this.editor.command("setOrderedListAttrs", data)
+                  editor.command("setOrderedListAttrs", data)
                 }
               }
-            });
+            }), 0);
+
+            return false;
           },
           setOrderedListAttrs: (attrs) => (state, dispatch, view) => {
             const { type } = attrs;
